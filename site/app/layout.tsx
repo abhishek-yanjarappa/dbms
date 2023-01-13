@@ -14,7 +14,7 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
       </head>
       <body>
         <Context>
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
         </Context>
       </body>
