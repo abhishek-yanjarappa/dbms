@@ -8,6 +8,7 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   content: [
+    "./node_modules/flowbite-react/**/*.js",
     "./app/**/*.{tsx, ts, jsx, js}",
     "./components/**/*.{tsx, ts, jsx, js}",
   ],
@@ -55,5 +56,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

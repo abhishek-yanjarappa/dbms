@@ -1,10 +1,11 @@
 "use client";
-import { Button } from "@uvcemarvel/web-ui";
+import { signIn } from "next-auth/react";
+import { ReactNode } from "react";
 
 const LoginWidget = () => {
   return (
     <div className="flex gap-5 flex-wrap">
-      <Button>Login with Google</Button>
+      <button onClick={() => signIn("google")}>Login with Google</button>
     </div>
   );
 };

@@ -1,62 +1,47 @@
 "use client";
 
-import {
-  Appbar,
-  Button,
-  IconButton,
-  Avatar,
-  LoadingPulser,
-} from "@uvcemarvel/web-ui";
 import { useSession, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
-import { HiOutlineBars2 as MenuIcon } from "react-icons/hi2";
+import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
 
-const Navbar = () => {
+const Appbar = () => {
   const { data: session, status } = useSession();
 
   return (
-    <Appbar className={"bottom-0"}>
-      <div
-        className={`w-full max-w-screen-lg flex justify-between items-center relative `}
-      >
-        <div className="flex items-center">
-          <IconButton variant={"text"} className="mr-2">
-            <MenuIcon aria-hidden className="h-6 w-6 text-p-10" />
-          </IconButton>
-          <Link href={"/"}>
-            <span className="text-p-8 font-semibold text-center cursor-pointer">
-              MARVEL.
-            </span>
-          </Link>
-        </div>
-        {session?.user ? (
-          <div className="flex items-center">
-            <Link href={`/u/${session?.user?.slug}`} className="mr-3">
+    <Navbar fluid={true} rounded={true}>
+      <Navbar.Brand href="https://flowbite.com/">
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+          DBMS Project CSM
+        </span>
+      </Navbar.Brand>
+      <div className="flex md:order-2">
+        {session ? (
+          <Dropdown
+            arrowIcon={false}
+            inline={true}
+            label={
               <Avatar
-                src={session?.user?.profilePic}
-                alt={session?.user?.name}
+                alt="User settings"
+                img={session.user?.image}
+                rounded={true}
               />
-            </Link>
-            <Button
-              onClick={() => signOut()}
-              className="text-sm hidden md:block"
-            >
-              Sign Out
-            </Button>
-          </div>
-        ) : status === "loading" ? (
-          <LoadingPulser />
-        ) : (
-          <Button
-            onClick={() => signIn("google", { redirect: false })}
-            className={"text-sm"}
+            }
           >
-            Sign In
-          </Button>
+            <Dropdown.Header>
+              <span className="block text-sm">{session.user?.name}</span>
+              <span className="block truncate text-sm font-medium">
+                {session?.user?.email}
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
+            <Navbar.Toggle />
+          </Dropdown>
+        ) : (
+          <Button onClick={() => signIn("google")}>Login</Button>
         )}
+        <Navbar.Toggle />
       </div>
-    </Appbar>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default Appbar;
