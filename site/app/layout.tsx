@@ -6,7 +6,7 @@ function RootLayout({ children, ...pageProps }: { children: React.ReactNode }) {
   return (
     <html lang="en" style={{ scrollbarGutter: "stable" }}>
       <head>
-        <title>marvel.</title>
+        <title>UVCE DBMS Project</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"

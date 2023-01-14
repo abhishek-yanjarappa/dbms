@@ -24,7 +24,7 @@ const queryClient = new QueryClient({
 
 function Context({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider refetchOnWindowFocus={false}>
+    <SessionProvider refetchOnWindowFocus={true}>
       <ThemeProvider
         attribute="class"
         enableSystem={false}

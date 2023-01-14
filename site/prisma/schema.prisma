@@ -12,22 +12,28 @@ generator client {
 }
 
 model Enterprize {
-  id        Int        @id @default(autoincrement())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  email     String     @unique
-  name      String     @db.VarChar(255)
-  Agents    Agent[]
-  Tickets   Ticket[]
-  Chats     Chat[]
-  Customers Customer[]
+  id            Int        @id @default(autoincrement())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  email         String     @unique
+  name          String     @db.VarChar(255)
+  photo         String?
+  telegramToken String?    @unique
+  Agents        Agent[]
+  Tickets       Ticket[]
+  Chats         Chat[]
+  Customers     Customer[]
 }
 
 model Agent {
   id           Int         @id @default(autoincrement())
+  googleId     String      @unique
+  name         String      @db.VarChar(255)
+  email        String      @unique
+  photo        String?
+  isAdmin      Boolean     @default(false)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  name         String      @db.VarChar(255)
   Enterprize   Enterprize? @relation(fields: [enterprizeId], references: [id])
   enterprizeId Int?
   Tickets      Ticket[]

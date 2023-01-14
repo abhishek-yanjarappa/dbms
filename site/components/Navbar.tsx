@@ -2,16 +2,19 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Navbar, Dropdown, Avatar, Button } from "flowbite-react";
+import Link from "next/link";
 
 const Appbar = () => {
   const { data: session, status } = useSession();
 
   return (
     <Navbar fluid={true} rounded={true}>
-      <Navbar.Brand href="https://flowbite.com/">
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          DBMS Project CSM
-        </span>
+      <Navbar.Brand>
+        <Link href="/">
+          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+            DBMS Project CSM
+          </span>
+        </Link>
       </Navbar.Brand>
       <div className="flex md:order-2">
         {session ? (
@@ -21,7 +24,7 @@ const Appbar = () => {
             label={
               <Avatar
                 alt="User settings"
-                img={session.user?.image}
+                img={session.user?.photo}
                 rounded={true}
               />
             }
@@ -33,7 +36,6 @@ const Appbar = () => {
               </span>
             </Dropdown.Header>
             <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
-            <Navbar.Toggle />
           </Dropdown>
         ) : (
           <Button onClick={() => signIn("google")}>Login</Button>
