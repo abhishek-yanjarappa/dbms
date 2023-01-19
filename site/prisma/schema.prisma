@@ -12,17 +12,16 @@ generator client {
 }
 
 model Enterprize {
-  id            Int        @id @default(autoincrement())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  email         String     @unique
-  name          String     @db.VarChar(255)
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  email         String   @unique
+  name          String   @db.VarChar(255)
   photo         String?
-  telegramToken String?    @unique
+  telegramToken String?  @unique
   Agents        Agent[]
   Tickets       Ticket[]
   Chats         Chat[]
-  Customers     Customer[]
 }
 
 model Agent {
@@ -40,6 +39,7 @@ model Agent {
 }
 
 enum TicketStatus {
+  TEMP
   PENDING
   ASSIGNED
   CLOSED
@@ -71,6 +71,7 @@ model Chat {
   updatedAt    DateTime    @updatedAt
   ChatMedium   ChatMedium  @default(TELEGRAM)
   ChatKey      String      @unique
+  State        Int
   Enterprize   Enterprize? @relation(fields: [enterprizeId], references: [id])
   enterprizeId Int?
   Ticket       Ticket[]
@@ -89,11 +90,11 @@ model ChatItem {
 }
 
 model Customer {
-  id           Int        @id @default(autoincrement())
-  Chat         Chat[]
-  name         String
-  email        String     @unique
-  phone        String?    @unique
-  Enterprize   Enterprize @relation(fields: [enterprizeId], references: [id])
-  enterprizeId Int
+  id       Int     @id @default(autoincrement())
+  Chat     Chat[]
+  name     String
+  email    String  @unique
+  phone    String? @unique
+  verified Boolean @default(false)
+  OTP      String?
 }
