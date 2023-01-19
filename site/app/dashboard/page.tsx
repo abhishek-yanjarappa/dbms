@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "flowbite-react";
 import CreateTeamModal from "./CreateTeamModal";
+import TicketList from "./TicketList";
 
 const Dashboard = () => {
   const session = useSession();
@@ -37,7 +38,10 @@ const Dashboard = () => {
   return (
     <div className="w-full flex justify-center">
       <div className="w-full flex flex-wrap gap-5 max-w-6xl p-5 ">
-        <h1 className="text-5xl">Dashoard</h1>
+        <h1 className="text-5xl my-5">Dashoard</h1>
+        <div className="w-full">
+          <TicketList />
+        </div>
       </div>
     </div>
   );
