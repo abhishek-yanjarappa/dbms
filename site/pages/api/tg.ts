@@ -53,7 +53,7 @@ export default async function handler(
     });
     const chatState = chat?.State;
     const incomingMessage: string = req.body?.message?.text;
-
+    console.log(req.body?.message, chatState);
     switch (chatState) {
       case undefined:
         await dbClient.chat.create({
@@ -81,9 +81,9 @@ export default async function handler(
             data: {
               email: email as string,
               name:
-                req.body?.message?.from?.first_name +
-                " " +
-                req.body?.message?.from?.last_name,
+                req.body?.message?.from?.first_name ||
+                "" + " " + req.body?.message?.from?.last_name ||
+                "",
               Chats: {
                 connect: {
                   id: chat.id,

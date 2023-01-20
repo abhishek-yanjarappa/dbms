@@ -12,38 +12,35 @@ export default async function handler(
     const sessionUser = (await unstable_getServerSession(req, res, authOptions))
       .user;
 
-    const tickets = await dbClient.ticket.findMany({
+    const chatId = req.query?.chatId;
+    const chat = await dbClient.chat.findUnique({
       where: {
-        enterprizeId: sessionUser?.Enterprize?.id,
+        id: Number(chatId),
       },
-      include: {
-        Customer: {
-          select: {
-            name: true,
-          },
-        },
-        Agent: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        Chat: {
+
+      select: {
+        ChatItems: true,
+        Enterprize: {
           select: {
             id: true,
           },
         },
       },
     });
+
+    if (chat?.Enterprize?.id !== sessionUser?.Enterprize?.id) {
+      return res
+        .status(403)
+        .json({ code: "INVALID_REQUEST", message: "not authorised" });
+    }
+
     return res.status(200).json({
-      tickets: tickets,
+      chat: chat,
       message: "Tickets fetched Successfully",
       code: "SUCCESS",
     });
   } catch (error) {
-    if (error?.response?.data?.error_code === 404) {
-      return res.status(200).json({ code: "INVALID_TOKEN" });
-    }
+    console.log(error);
     res.status(200).json({ message: "Something went wrong" });
   }
 }
