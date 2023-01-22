@@ -59,6 +59,7 @@ model Ticket {
   chatId       Int
   status       TicketStatus @default(PENDING)
   body         String?
+  ChatItem     ChatItem[]
 }
 
 enum ChatMedium {
@@ -95,6 +96,8 @@ model ChatItem {
   body      String
   media     String?
   author    AuthorType
+  Ticket    Ticket?    @relation(fields: [ticketId], references: [id])
+  ticketId  Int?
 }
 
 model Customer {

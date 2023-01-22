@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbClient from "../../lib/prismadb";
 import axios from "axios";
+import sendMessage from "../../lib/teleSend";
 
 const extractEmail = (str: string): string | boolean => {
   const emailRegex = /\S+@\S+\.\S+/;
@@ -12,13 +13,6 @@ const getMessageMeaning = async (incomingMessage: string) => {
   const response = await axios.get(
     `https://api.wit.ai/message?q=${incomingMessage}&n=1`,
     { headers: { Authorization: `Bearer ${process.env.WIT_AI}` } }
-  );
-  return response.data;
-};
-
-const sendMessage = async (token: string, chatId: string, message: string) => {
-  const response = await axios.get(
-    `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=HTML`
   );
   return response.data;
 };
@@ -117,16 +111,7 @@ export default async function handler(
           );
         }
       case 2:
-        await dbClient.chatItem.create({
-          data: {
-            body: incomingMessage,
-            Chat: {
-              connect: { id: chat.id },
-            },
-            author: "CUSTOMER",
-          },
-        });
-        await dbClient.ticket.create({
+        const ticket = await dbClient.ticket.create({
           data: {
             body: incomingMessage,
             Chat: {
@@ -147,6 +132,20 @@ export default async function handler(
             status: "PENDING",
           },
         });
+        await dbClient.chatItem.create({
+          data: {
+            body: incomingMessage,
+            Chat: {
+              connect: { id: chat.id },
+            },
+            author: "CUSTOMER",
+            Ticket: {
+              connect: {
+                id: ticket?.id,
+              },
+            },
+          },
+        });
         await dbClient.chat.update({
           where: {
             id: chat.id,
@@ -158,12 +157,16 @@ export default async function handler(
         await sendMessage(
           chat.Enterprize.telegramToken,
           chat.ChatKey,
-          `A Ticket has been raised for your query:\n\n
-          "${incomingMessage}"\n
-          Please wait for an agent to respond. Thank you.
+          `A Ticket has been raised for your query: "${incomingMessage}". Please wait for an agent to respond. Thank you.
           `
         );
       case 3:
+        const thisTicket = await dbClient.ticket.findFirst({
+          where: {
+            chatId: chat?.id,
+          },
+          take: -1,
+        });
         await dbClient.chatItem.create({
           data: {
             author: "CUSTOMER",
@@ -171,6 +174,11 @@ export default async function handler(
             Chat: {
               connect: {
                 id: chat.id,
+              },
+            },
+            Ticket: {
+              connect: {
+                id: thisTicket?.id,
               },
             },
           },

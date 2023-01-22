@@ -19,7 +19,11 @@ export default async function handler(
       },
 
       select: {
-        ChatItems: true,
+        ChatItems: {
+          where: {
+            ticketId: Number(req.query?.ticketId),
+          },
+        },
         Enterprize: {
           select: {
             id: true,

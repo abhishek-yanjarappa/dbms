@@ -11,8 +11,9 @@ const Appbar = () => {
     <Navbar fluid={true} rounded={true}>
       <Navbar.Brand>
         <Link href="/">
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            DBMS Project CSM
+          <span className="self-center whitespace-nowrap dark:text-white">
+            DBMS Project CSM{" "}
+            {session ? `| ${session?.user?.Enterprize?.name}` : ""}
           </span>
         </Link>
       </Navbar.Brand>

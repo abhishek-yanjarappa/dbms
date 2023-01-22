@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Badge, Button, Spinner } from "flowbite-react";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useSession } from "next-auth/react";
 
 const assignAgent = async (ticketId: number) => {
@@ -17,12 +17,14 @@ const Ticket = ({
 }) => {
   const { data, isLoading, mutate } = useMutation(() => assignAgent(t?.id));
   const sessionUser = useSession().data.user;
+  const queryClient = useQueryClient();
   const handlePick = () => {
     mutate();
+    queryClient.invalidateQueries(["ticket-list"]);
   };
 
   return (
-    <div className="rounded-lg border border-p-5 bg-p-1 min-w-[250px] cursor-pointer">
+    <div className="rounded-lg border border-p-5 bg-p-1 min-w-[250px] cursor-pointer flex-1 max-w-[250px] h-min">
       <div className="p-5 bg-p-2 rounded-t-lg">
         <h6 className="text-lg">{t?.body}</h6>
       </div>
@@ -48,13 +50,23 @@ const Ticket = ({
           <Button
             onClick={handlePick}
             className="w-full rounded-none rounded-b-lg"
+            color={"dark"}
           >
             {isLoading ? <Spinner /> : "Pick"}
+          </Button>
+        ) : t?.status === "CLOSED" ? (
+          <Button
+            onClick={setChatModal}
+            color={"dark"}
+            className="w-full rounded-none rounded-b-lg"
+          >
+            {isLoading ? <Spinner /> : "View"}
           </Button>
         ) : t?.Agent?.id === sessionUser?.id ? (
           <Button
             className="w-full rounded-none rounded-b-lg"
             onClick={setChatModal}
+            color={"dark"}
           >
             {isLoading ? <Spinner /> : "Open"}
           </Button>

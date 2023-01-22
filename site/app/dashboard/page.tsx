@@ -38,7 +38,7 @@ const Dashboard = () => {
   return (
     <div className="w-full flex justify-center">
       <div className="w-full flex flex-wrap gap-5 max-w-6xl p-5 ">
-        <h1 className="text-5xl my-5">Dashoard</h1>
+        <h1 className="text-5xl my-5">Dashboard</h1>
         <div className="w-full">
           <TicketList />
         </div>
