@@ -9,7 +9,7 @@ export default function Home() {
         <p className="w-full text-p-7 ">By</p>
         <ul>
           <li className="text-base">Abhishek Y (20GANSE004)</li>
-          <li className="text-base">Darchan T D (20GANSE016)</li>
+          <li className="text-base">Darshan T D (20GANSE016)</li>
         </ul>
         <div className="w-full">
           <LoginWidget />

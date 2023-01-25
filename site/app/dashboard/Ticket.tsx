@@ -71,7 +71,7 @@ const Ticket = ({
             {isLoading ? <Spinner /> : "Open"}
           </Button>
         ) : (
-          <div className="w-full rounded-b-lg flex justify-center text-sm">{`Assigned to ${t?.Agent?.name}`}</div>
+          <div className="w-full rounded-b-lg flex justify-center text-sm py-3">{`Assigned to ${t?.Agent?.name}`}</div>
         )}
       </div>
     </div>

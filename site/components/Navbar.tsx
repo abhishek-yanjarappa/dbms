@@ -13,7 +13,7 @@ const Appbar = () => {
         <Link href="/">
           <span className="self-center whitespace-nowrap dark:text-white">
             DBMS Project CSM{" "}
-            {session ? `| ${session?.user?.Enterprize?.name}` : ""}
+            {session ? `| ${session?.user?.Enterprize?.name || ""}` : ""}
           </span>
         </Link>
       </Navbar.Brand>
